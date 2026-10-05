@@ -78,6 +78,10 @@ if (filter_var(env('DB_SSL', 'false'), FILTER_VALIDATE_BOOLEAN)) {
 try {
     # إنشاء الاتصال باستخدام PDO مع دعم اللغة العربية (utf8mb4)
     $database = new PDO("mysql:host=$host;port=$port;dbname=$db;charset=utf8mb4", $username, $password, $options);
+
+    # إنشاء الجداول تلقائياً إذا كانت قاعدة البيانات فارغة (أول تشغيل)
+    require_once __DIR__ . '/schema.php';
+    ensure_schema($database);
 } catch (PDOException $error) {
     # (التوافر + السرية) نسجّل تفاصيل الخطأ في سجل السيرفر فقط (يظهر في Vercel → Logs)
     # ونعرض للمستخدم رسالة عامة، لأن رسالة الخطأ الأصلية قد تكشف اسم القاعدة أو المستخدم

@@ -35,7 +35,8 @@ Vercel لا يدعم PHP بشكل مباشر، لذلك نستخدم الـ runt
 > ملاحظة: قاعدة بيانات InfinityFree **لا تقبل** الاتصال من خارج استضافتها، لذلك لا تعمل مع Vercel.
 
 ### الخطوات
-1. **أنشئ قاعدة MySQL سحابية** ثم نفّذ فيها الملف `database/database_hosting.sql` (من الـ SQL Editor الخاص بالخدمة أو أي برنامج مثل MySQL Workbench / DBeaver).
+1. **أنشئ قاعدة MySQL سحابية** ثم أنشئ فيها قاعدة باسم `realestate` (`CREATE DATABASE realestate;`).
+   الجداول والمستخدم الافتراضي تُنشأ **تلقائياً** عند أول فتح للموقع، فلا حاجة لاستيراد أي ملف SQL.
 2. **ارفع المشروع إلى GitHub** ثم من [vercel.com/new](https://vercel.com/new) اختر المستودع → Import.
    - Framework Preset: **Other** — ولا تغيّر أي إعداد آخر (كل شيء في `vercel.json`).
 3. **أضف متغيرات البيئة** في Project → Settings → Environment Variables (انظر `.env.example`):
@@ -88,6 +89,7 @@ Vercel لا يدعم PHP بشكل مباشر، لذلك نستخدم الـ runt
 | `api/index.php` | نقطة الدخول الوحيدة: توجّه كل رابط للصفحة المناسبة في `src/` |
 | `dev-router.php` | تشغيل المشروع على الجهاز بنفس توجيه Vercel |
 | `src/_includes/connect.php` | الاتصال بقاعدة البيانات + إعداد الجلسة |
+| `src/_includes/schema.php` | إنشاء الجداول تلقائياً عند أول تشغيل |
 | `src/_includes/session.php` | حفظ الجلسات في قاعدة البيانات |
 | `src/_includes/functions.php` | الدوال المساعدة (الحماية، التحقق، الرسائل) |
 | `src/_includes/header.php` / `footer.php` | الأجزاء المشتركة (القائمة الجانبية والتذييل) |
