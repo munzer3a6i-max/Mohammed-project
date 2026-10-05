@@ -83,6 +83,36 @@ try {
     # ونعرض للمستخدم رسالة عامة، لأن رسالة الخطأ الأصلية قد تكشف اسم القاعدة أو المستخدم
     error_log('DB connection failed: ' . $error->getMessage());
     http_response_code(503);
+
+    $box = '<div style="font-family:sans-serif;max-width:640px;margin:60px auto;padding:0 16px;line-height:1.6">';
+
+    # على Vercel بدون أي إعداد لقاعدة البيانات: نوضح السبب مباشرة (لا يكشف أي بيانات سرية)
+    if (getenv('VERCEL') && env('DB_HOST') === '' && env('DATABASE_URL') === '') {
+        die($box . '<h2>Database is not configured</h2>
+             <p>Add <code>DB_HOST</code>, <code>DB_PORT</code>, <code>DB_NAME</code>, <code>DB_USER</code>,
+             <code>DB_PASSWORD</code> and <code>DB_SSL</code> in Vercel → Project → Settings → Environment Variables,
+             then <strong>redeploy</strong>.</p></div>');
+    }
+
+    # وضع التشخيص: DB_DEBUG=true يعرض سبب الخطأ (فعّله مؤقتاً فقط ثم احذفه)
+    if (filter_var(env('DB_DEBUG', 'false'), FILTER_VALIDATE_BOOLEAN)) {
+        $msg  = $error->getMessage();
+        $hint = 'See the error message above.';
+        if (stripos($msg, 'insecure transport') !== false || stripos($msg, 'SSL') !== false || stripos($msg, 'TLS') !== false) {
+            $hint = 'The database requires an encrypted connection: set <code>DB_SSL=true</code>.';
+        } elseif (strpos($msg, '[1045]') !== false) {
+            $hint = 'Wrong <code>DB_USER</code> or <code>DB_PASSWORD</code>.';
+        } elseif (strpos($msg, '[1049]') !== false || strpos($msg, '[1044]') !== false) {
+            $hint = 'Check <code>DB_NAME</code>: the database must exist and this user must have access to it. Create it, then run <code>database/database_hosting.sql</code>.';
+        } elseif (strpos($msg, '[2002]') !== false || strpos($msg, '[2005]') !== false || stripos($msg, 'timed out') !== false) {
+            $hint = 'Cannot reach the server: check <code>DB_HOST</code> and <code>DB_PORT</code> (TiDB uses 4000). '
+                  . 'Free hosts like InfinityFree do not allow outside connections, so they cannot be used with Vercel.';
+        }
+        die($box . '<h2>Database connection failed</h2><pre style="white-space:pre-wrap;background:#f3f4f6;padding:12px;border-radius:8px">'
+            . htmlspecialchars($msg, ENT_QUOTES, 'UTF-8') . '</pre><p><strong>Hint:</strong> ' . $hint
+            . '</p><p style="color:#b45309">Remove <code>DB_DEBUG</code> once it works.</p></div>');
+    }
+
     die('<h2 style="font-family:sans-serif;text-align:center;margin-top:60px">
          The system is temporarily unavailable. Please try again later.</h2>');
 }

@@ -52,6 +52,11 @@ Vercel لا يدعم PHP بشكل مباشر، لذلك نستخدم الـ runt
    أو بدلاً منها متغير واحد: `DATABASE_URL=mysql://user:pass@host:port/realestate`
 4. اضغط **Deploy** ثم افتح الرابط وسجّل الدخول، وغيّر كلمة المرور فوراً من صفحة Security.
 
+### ⚠️ تظهر رسالة "The system is temporarily unavailable"؟
+معناها أن الموقع لم يستطع الاتصال بقاعدة البيانات. أضف المتغير `DB_DEBUG=true` ثم أعد النشر (Redeploy)، وستظهر رسالة الخطأ الحقيقية مع تلميح للحل. احذف `DB_DEBUG` بعد أن يعمل الموقع.
+- **تذكّر:** أي تغيير في متغيرات البيئة لا يُطبّق إلا بعد **Redeploy**
+- قاعدة InfinityFree لا تقبل الاتصال من Vercel — استخدم TiDB Cloud أو Aiven
+
 أو من سطر الأوامر: `npm i -g vercel` ثم `vercel` (وأضف المتغيرات بـ `vercel env add`).
 
 ### ما الذي تغيّر لدعم Vercel؟
