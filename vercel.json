@@ -7,8 +7,20 @@
     }
   },
   "routes": [
-    { "handle": "filesystem" },
-    { "src": "/", "dest": "/api/index.php?__page=index" },
-    { "src": "/([A-Za-z]+)\\.php", "dest": "/api/index.php?__page=$1" }
+    {
+      "handle": "filesystem"
+    },
+    {
+      "src": "/favicon.ico",
+      "dest": "/favicon.svg"
+    },
+    {
+      "src": "/",
+      "dest": "/api/index.php?__page=index"
+    },
+    {
+      "src": "/([A-Za-z]+)\\.php",
+      "dest": "/api/index.php?__page=$1"
+    }
   ]
 }

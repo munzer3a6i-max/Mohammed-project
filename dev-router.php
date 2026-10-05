@@ -7,6 +7,10 @@
 # ==========================================================
 $path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 
+if ($path === '/favicon.ico') {
+    $path = '/favicon.svg';
+}
+
 if ($path === '/') {
     $path = '/index.php';
 }

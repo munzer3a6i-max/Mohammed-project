@@ -33,6 +33,7 @@ $menu = [
     <!-- مكتبة الأيقونات Boxicons -->
     <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
     <!-- ملف التنسيق الرئيسي للمشروع -->
+    <link rel="icon" href="favicon.svg" type="image/svg+xml">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
