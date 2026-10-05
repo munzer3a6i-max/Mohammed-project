@@ -3,7 +3,7 @@
 # تشغيل المشروع على الجهاز بنفس توجيه Vercel (للتطوير فقط)
 #   php -S localhost:8000 dev-router.php
 # ثم افتح http://localhost:8000
-# الملفات الثابتة من public/ والصفحات من api/
+# الملفات الثابتة من public/ والصفحات من src/ عبر api/index.php
 # ==========================================================
 $path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 
@@ -21,10 +21,10 @@ if ($path !== '/' && is_file($static)) {
     return;
 }
 
-# صفحات PHP (نفس القائمة الموجودة في vercel.json)
-if (preg_match('#^/(index|MinePage|Page|Add|Update|Up|Delet|Delete|Find|Show|Security|Backup|Exit)\.php$#', $path, $m)) {
-    chdir(__DIR__ . '/api');
-    require __DIR__ . '/api/' . $m[1] . '.php';
+# كل صفحات PHP تمر من api/index.php (نفس vercel.json)
+if ($path === '/index.php' || preg_match('#^/[A-Za-z]+\.php$#', $path)) {
+    $_GET['__page'] = basename($path, '.php');
+    require __DIR__ . '/api/index.php';
     return;
 }
 

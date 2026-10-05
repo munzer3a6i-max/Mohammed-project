@@ -2,13 +2,13 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "outputDirectory": "public",
   "functions": {
-    "api/*.php": {
+    "api/index.php": {
       "runtime": "vercel-php@0.7.4"
     }
   },
   "routes": [
     { "handle": "filesystem" },
-    { "src": "/", "dest": "/api/index.php" },
-    { "src": "/(index|MinePage|Page|Add|Update|Up|Delet|Delete|Find|Show|Security|Backup|Exit)\\.php", "dest": "/api/$1.php" }
+    { "src": "/", "dest": "/api/index.php?__page=index" },
+    { "src": "/([A-Za-z]+)\\.php", "dest": "/api/index.php?__page=$1" }
   ]
 }

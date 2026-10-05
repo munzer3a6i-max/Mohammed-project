@@ -55,7 +55,8 @@ Vercel لا يدعم PHP بشكل مباشر، لذلك نستخدم الـ runt
 أو من سطر الأوامر: `npm i -g vercel` ثم `vercel` (وأضف المتغيرات بـ `vercel env add`).
 
 ### ما الذي تغيّر لدعم Vercel؟
-- صفحات PHP انتقلت إلى `api/` (كل صفحة = Serverless Function)، والملفات المشتركة إلى `api/_includes/`
+- كل الطلبات تمر من دالة واحدة فقط `api/index.php` (لأن خطة Hobby المجانية تسمح بـ 12 دالة كحد أقصى)، وهي تستدعي الصفحة المطلوبة من `src/`
+- الصفحات في `src/`، والملفات المشتركة في `src/_includes/`
 - الملفات الثابتة (CSS / JS / الصورة) في `public/`
 - `vercel.json` يوجّه الروابط القديمة نفسها (`/Page.php`, `/Add.php` ...) إلى الصفحات، فلا تتغير الروابط
 - بيانات قاعدة البيانات تُقرأ من متغيرات البيئة بدل كتابتها في الكود
@@ -79,23 +80,24 @@ Vercel لا يدعم PHP بشكل مباشر، لذلك نستخدم الـ runt
 |------|---------|
 | `vercel.json` | إعدادات Vercel (الـ runtime والتوجيه) |
 | `.env.example` | متغيرات البيئة المطلوبة |
+| `api/index.php` | نقطة الدخول الوحيدة: توجّه كل رابط للصفحة المناسبة في `src/` |
 | `dev-router.php` | تشغيل المشروع على الجهاز بنفس توجيه Vercel |
-| `api/_includes/connect.php` | الاتصال بقاعدة البيانات + إعداد الجلسة |
-| `api/_includes/session.php` | حفظ الجلسات في قاعدة البيانات |
-| `api/_includes/functions.php` | الدوال المساعدة (الحماية، التحقق، الرسائل) |
-| `api/_includes/header.php` / `footer.php` | الأجزاء المشتركة (القائمة الجانبية والتذييل) |
-| `api/_includes/table.php` | جدول عرض القطع المشترك |
-| `api/_includes/block_form.php` | نموذج بيانات القطعة المشترك |
-| `api/MinePage.php` | تسجيل الدخول |
-| `api/Page.php` | لوحة التحكم |
-| `api/Add.php` | إضافة قطعة |
-| `api/Update.php` → `api/Up.php` | البحث ثم تعديل قطعة |
-| `api/Delet.php` → `api/Delete.php` | البحث ثم حذف قطعة |
-| `api/Find.php` | البحث بالاسم أو رقم المخطط |
-| `api/Show.php` | عرض كل القطع |
-| `api/Security.php` | صفحة الأمان CIA: تغيير كلمة المرور، النسخ الاحتياطي، سجل العمليات |
-| `api/Backup.php` | تنزيل النسخة الاحتياطية |
-| `api/Exit.php` | تسجيل الخروج |
+| `src/_includes/connect.php` | الاتصال بقاعدة البيانات + إعداد الجلسة |
+| `src/_includes/session.php` | حفظ الجلسات في قاعدة البيانات |
+| `src/_includes/functions.php` | الدوال المساعدة (الحماية، التحقق، الرسائل) |
+| `src/_includes/header.php` / `footer.php` | الأجزاء المشتركة (القائمة الجانبية والتذييل) |
+| `src/_includes/table.php` | جدول عرض القطع المشترك |
+| `src/_includes/block_form.php` | نموذج بيانات القطعة المشترك |
+| `src/MinePage.php` | تسجيل الدخول |
+| `src/Page.php` | لوحة التحكم |
+| `src/Add.php` | إضافة قطعة |
+| `src/Update.php` → `src/Up.php` | البحث ثم تعديل قطعة |
+| `src/Delet.php` → `src/Delete.php` | البحث ثم حذف قطعة |
+| `src/Find.php` | البحث بالاسم أو رقم المخطط |
+| `src/Show.php` | عرض كل القطع |
+| `src/Security.php` | صفحة الأمان CIA: تغيير كلمة المرور، النسخ الاحتياطي، سجل العمليات |
+| `src/Backup.php` | تنزيل النسخة الاحتياطية |
+| `src/Exit.php` | تسجيل الخروج |
 | `public/style.css` / `public/app.js` | التنسيق والجافاسكربت |
 | `database/database.sql` | إنشاء قاعدة البيانات (على الجهاز / XAMPP) |
 | `database/database_hosting.sql` | نسخة قاعدة البيانات للاستضافة السحابية |
