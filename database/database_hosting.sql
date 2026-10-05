@@ -5,7 +5,7 @@
 -- ملاحظة: في SQL نكتب الشرح بعد -- وليس #
 -- ==========================================================
 
--- هذه النسخة مخصصة للاستضافة (مثل InfinityFree)
+-- هذه النسخة مخصصة للاستضافة (مثل TiDB Cloud أو Aiven مع Vercel، أو InfinityFree)
 -- لا تحتوي CREATE DATABASE ولا USE لأن الاستضافة تنشئ القاعدة من لوحة التحكم
 -- قبل الاستيراد: افتح phpMyAdmin من لوحة الاستضافة واختر قاعدة بياناتك من اليسار
 
@@ -68,6 +68,19 @@ CREATE TABLE IF NOT EXISTS audit_log (
     IPAddress VARCHAR(45)  NOT NULL,           -- عنوان جهاز المستخدم
     CreatedAt DATETIME     NOT NULL,           -- تاريخ ووقت العملية
     INDEX idx_created (CreatedAt)              -- فهرس لتسريع عرض آخر العمليات
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+
+-- ----------------------------------------------------------
+-- جدول الجلسات (sessions)
+-- يحفظ جلسات تسجيل الدخول في قاعدة البيانات بدل ملفات السيرفر
+-- (ضروري على Vercel لأن كل طلب قد يعمل على سيرفر مختلف)
+-- ----------------------------------------------------------
+CREATE TABLE IF NOT EXISTS sessions (
+    ID         VARCHAR(128) NOT NULL PRIMARY KEY,  -- رقم الجلسة
+    Data       BLOB         NOT NULL,              -- بيانات الجلسة
+    LastAccess INT UNSIGNED NOT NULL,              -- وقت آخر استخدام (Unix timestamp)
+    INDEX idx_last_access (LastAccess)             -- لتسريع حذف الجلسات المنتهية
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 

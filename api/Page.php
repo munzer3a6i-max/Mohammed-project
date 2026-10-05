@@ -5,7 +5,7 @@
 # ==========================================================
 
 # الاتصال بقاعدة البيانات
-include 'connect.php';
+require __DIR__ . '/_includes/connect.php';
 
 # منع الدخول لهذه الصفحة بدون تسجيل دخول
 require_login();
@@ -31,7 +31,7 @@ $rows = $database->query("SELECT * FROM estate ORDER BY ID DESC LIMIT 5")->fetch
 # إعدادات الصفحة ثم استدعاء الجزء العلوي
 $pageTitle  = 'Dashboard';
 $activePage = 'Page.php';
-include 'header.php';
+include __DIR__ . '/_includes/header.php';
 ?>
 
 <!-- ===== بطاقات الإحصائيات ===== -->
@@ -112,7 +112,7 @@ include 'header.php';
 
     <?php if ($rows): ?>
         <!-- استدعاء الجدول المشترك بدون أزرار تعديل وحذف -->
-        <?php include 'table.php'; ?>
+        <?php include __DIR__ . '/_includes/table.php'; ?>
     <?php else: ?>
         <!-- رسالة تظهر إذا لا توجد بيانات -->
         <div class="empty"><i class="bx bx-folder-open"></i><p>No blocks yet. Start by adding a new block.</p></div>
@@ -121,5 +121,5 @@ include 'header.php';
 
 <?php
 # استدعاء الجزء السفلي للصفحة
-include 'footer.php';
+include __DIR__ . '/_includes/footer.php';
 ?>

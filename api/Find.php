@@ -5,7 +5,7 @@
 # ==========================================================
 
 # الاتصال بقاعدة البيانات + التأكد من تسجيل الدخول
-include 'connect.php';
+require __DIR__ . '/_includes/connect.php';
 require_login();
 
 # قراءة كلمة البحث من الرابط
@@ -32,7 +32,7 @@ if ($search !== '') {
 # إعدادات الصفحة
 $pageTitle  = 'Find Block';
 $activePage = 'Find.php';
-include 'header.php';
+include __DIR__ . '/_includes/header.php';
 ?>
 
 <!-- ===== نموذج البحث ===== -->
@@ -58,7 +58,7 @@ include 'header.php';
             $showEdit   = true;
             $showDelete = true;
             $backTo     = 'Find.php?search=' . urlencode($search);
-            include 'table.php';
+            include __DIR__ . '/_includes/table.php';
             ?>
         <?php else: ?>
             <div class="empty"><i class="bx bx-search-alt"></i><p>No results match your search.</p></div>
@@ -66,4 +66,4 @@ include 'header.php';
     </section>
 <?php endif; ?>
 
-<?php include 'footer.php'; ?>
+<?php include __DIR__ . '/_includes/footer.php'; ?>

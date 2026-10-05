@@ -8,7 +8,7 @@
 # ==========================================================
 
 # الاتصال بقاعدة البيانات + التأكد من تسجيل الدخول
-include 'connect.php';
+require __DIR__ . '/_includes/connect.php';
 require_login();
 
 # أخطاء نموذج تغيير كلمة المرور
@@ -73,7 +73,7 @@ $actionColors = [
 # إعدادات الصفحة
 $pageTitle  = 'Security (CIA)';
 $activePage = 'Security.php';
-include 'header.php';
+include __DIR__ . '/_includes/header.php';
 ?>
 
 <!-- ===== بطاقات مثلث الأمان CIA ===== -->
@@ -211,4 +211,4 @@ include 'header.php';
     <?php endif; ?>
 </section>
 
-<?php include 'footer.php'; ?>
+<?php include __DIR__ . '/_includes/footer.php'; ?>

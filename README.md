@@ -27,41 +27,75 @@
 ## 🛠️ التقنيات
 PHP 8 · MySQL · PDO · HTML5 · CSS3 · JavaScript · Boxicons
 
-## 🚀 التشغيل على الجهاز (XAMPP)
-1. انسخ مجلد `Real_estate` إلى `C:\xampp\htdocs\`
-2. شغّل **Apache** و **MySQL** من XAMPP Control Panel
-3. افتح `http://localhost/phpmyadmin` ثم **Import** واختر ملف `database.sql`
-4. افتح `http://localhost/Real_estate/`
+## ▲ النشر على Vercel
+
+Vercel لا يدعم PHP بشكل مباشر، لذلك نستخدم الـ runtime المجتمعي [`vercel-php`](https://github.com/vercel-community/php) (PHP 8.3) والإعدادات موجودة في `vercel.json`.
+وبما أن Vercel لا يوفر قاعدة MySQL، نحتاج قاعدة بيانات MySQL سحابية تقبل الاتصال من الخارج
+(مثل **TiDB Cloud Serverless** أو **Aiven for MySQL** — كلاهما فيه خطة مجانية).
+> ملاحظة: قاعدة بيانات InfinityFree **لا تقبل** الاتصال من خارج استضافتها، لذلك لا تعمل مع Vercel.
+
+### الخطوات
+1. **أنشئ قاعدة MySQL سحابية** ثم نفّذ فيها الملف `database/database_hosting.sql` (من الـ SQL Editor الخاص بالخدمة أو أي برنامج مثل MySQL Workbench / DBeaver).
+2. **ارفع المشروع إلى GitHub** ثم من [vercel.com/new](https://vercel.com/new) اختر المستودع → Import.
+   - Framework Preset: **Other** — ولا تغيّر أي إعداد آخر (كل شيء في `vercel.json`).
+3. **أضف متغيرات البيئة** في Project → Settings → Environment Variables (انظر `.env.example`):
+
+   | المتغير | مثال |
+   |--------|------|
+   | `DB_HOST` | `gateway01.eu-central-1.prod.aws.tidbcloud.com` |
+   | `DB_PORT` | `4000` (TiDB) أو `3306` |
+   | `DB_NAME` | `realestate` |
+   | `DB_USER` | اسم المستخدم |
+   | `DB_PASSWORD` | كلمة المرور |
+   | `DB_SSL` | `true` (مطلوب في TiDB و Aiven) |
+
+   أو بدلاً منها متغير واحد: `DATABASE_URL=mysql://user:pass@host:port/realestate`
+4. اضغط **Deploy** ثم افتح الرابط وسجّل الدخول، وغيّر كلمة المرور فوراً من صفحة Security.
+
+أو من سطر الأوامر: `npm i -g vercel` ثم `vercel` (وأضف المتغيرات بـ `vercel env add`).
+
+### ما الذي تغيّر لدعم Vercel؟
+- صفحات PHP انتقلت إلى `api/` (كل صفحة = Serverless Function)، والملفات المشتركة إلى `api/_includes/`
+- الملفات الثابتة (CSS / JS / الصورة) في `public/`
+- `vercel.json` يوجّه الروابط القديمة نفسها (`/Page.php`, `/Add.php` ...) إلى الصفحات، فلا تتغير الروابط
+- بيانات قاعدة البيانات تُقرأ من متغيرات البيئة بدل كتابتها في الكود
+- **الجلسات تُحفظ في قاعدة البيانات** (جدول `sessions`) لأن كل طلب على Vercel قد يعمل على سيرفر مختلف
+- دعم الاتصال المشفّر SSL، وقراءة HTTPS وعنوان IP الحقيقي من ترويسات Vercel
+
+## 🚀 التشغيل على الجهاز
+1. شغّل MySQL (من XAMPP مثلاً) واستورد `database/database.sql` من phpMyAdmin
+2. من مجلد المشروع شغّل: `php -S localhost:8000 dev-router.php`
+3. افتح `http://localhost:8000`
+
+بدون متغيرات بيئة يستخدم المشروع إعدادات XAMPP الافتراضية (`localhost` / `root` / بدون كلمة مرور / `realestate`).
 
 **بيانات الدخول الافتراضية:**
 | الاسم | كلمة المرور |
 |------|-------------|
 | `majed` | `majed123` |
 
-## 🌐 الرفع على استضافة (InfinityFree)
-1. أنشئ قاعدة بيانات MySQL من لوحة التحكم
-2. افتح phpMyAdmin واختر القاعدة ثم **Import** الملف `database_hosting.sql`
-3. عدّل بيانات الاتصال في `connect.php` حسب بيانات الاستضافة
-4. ارفع الملفات داخل مجلد `htdocs`
-
 ## 📁 هيكل الملفات
 | الملف | الوظيفة |
 |------|---------|
-| `connect.php` | الاتصال بقاعدة البيانات |
-| `functions.php` | الدوال المساعدة (الحماية، التحقق، الرسائل) |
-| `header.php` / `footer.php` | الأجزاء المشتركة (القائمة الجانبية والتذييل) |
-| `table.php` | جدول عرض القطع المشترك |
-| `block_form.php` | نموذج بيانات القطعة المشترك |
-| `MinePage.php` | تسجيل الدخول |
-| `Page.php` | لوحة التحكم |
-| `Add.php` | إضافة قطعة |
-| `Update.php` → `Up.php` | البحث ثم تعديل قطعة |
-| `Delet.php` → `Delete.php` | البحث ثم حذف قطعة |
-| `Find.php` | البحث بالاسم أو رقم المخطط |
-| `Show.php` | عرض كل القطع |
-| `Security.php` | صفحة الأمان CIA: تغيير كلمة المرور، النسخ الاحتياطي، سجل العمليات |
-| `Backup.php` | تنزيل النسخة الاحتياطية |
-| `Exit.php` | تسجيل الخروج |
-| `style.css` / `app.js` | التنسيق والجافاسكربت |
-| `database.sql` | إنشاء قاعدة البيانات (XAMPP) |
-| `database_hosting.sql` | نسخة قاعدة البيانات للاستضافة |
+| `vercel.json` | إعدادات Vercel (الـ runtime والتوجيه) |
+| `.env.example` | متغيرات البيئة المطلوبة |
+| `dev-router.php` | تشغيل المشروع على الجهاز بنفس توجيه Vercel |
+| `api/_includes/connect.php` | الاتصال بقاعدة البيانات + إعداد الجلسة |
+| `api/_includes/session.php` | حفظ الجلسات في قاعدة البيانات |
+| `api/_includes/functions.php` | الدوال المساعدة (الحماية، التحقق، الرسائل) |
+| `api/_includes/header.php` / `footer.php` | الأجزاء المشتركة (القائمة الجانبية والتذييل) |
+| `api/_includes/table.php` | جدول عرض القطع المشترك |
+| `api/_includes/block_form.php` | نموذج بيانات القطعة المشترك |
+| `api/MinePage.php` | تسجيل الدخول |
+| `api/Page.php` | لوحة التحكم |
+| `api/Add.php` | إضافة قطعة |
+| `api/Update.php` → `api/Up.php` | البحث ثم تعديل قطعة |
+| `api/Delet.php` → `api/Delete.php` | البحث ثم حذف قطعة |
+| `api/Find.php` | البحث بالاسم أو رقم المخطط |
+| `api/Show.php` | عرض كل القطع |
+| `api/Security.php` | صفحة الأمان CIA: تغيير كلمة المرور، النسخ الاحتياطي، سجل العمليات |
+| `api/Backup.php` | تنزيل النسخة الاحتياطية |
+| `api/Exit.php` | تسجيل الخروج |
+| `public/style.css` / `public/app.js` | التنسيق والجافاسكربت |
+| `database/database.sql` | إنشاء قاعدة البيانات (على الجهاز / XAMPP) |
+| `database/database_hosting.sql` | نسخة قاعدة البيانات للاستضافة السحابية |

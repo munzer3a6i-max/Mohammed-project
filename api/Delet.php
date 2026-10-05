@@ -6,7 +6,7 @@
 # ==========================================================
 
 # الاتصال بقاعدة البيانات + التأكد من تسجيل الدخول
-include 'connect.php';
+require __DIR__ . '/_includes/connect.php';
 require_login();
 
 # قراءة رقم الهوية من الرابط
@@ -24,7 +24,7 @@ if ($search !== '') {
 # إعدادات الصفحة
 $pageTitle  = 'Delete Block';
 $activePage = 'Delet.php';
-include 'header.php';
+include __DIR__ . '/_includes/header.php';
 ?>
 
 <!-- ===== نموذج البحث ===== -->
@@ -49,7 +49,7 @@ include 'header.php';
             <?php
             $showDelete = true;
             $backTo     = 'Delet.php?id_number=' . urlencode($search);
-            include 'table.php';
+            include __DIR__ . '/_includes/table.php';
             ?>
         <?php else: ?>
             <div class="empty"><i class="bx bx-search-alt"></i><p>No blocks found for this ID number.</p></div>
@@ -57,4 +57,4 @@ include 'header.php';
     </section>
 <?php endif; ?>
 
-<?php include 'footer.php'; ?>
+<?php include __DIR__ . '/_includes/footer.php'; ?>

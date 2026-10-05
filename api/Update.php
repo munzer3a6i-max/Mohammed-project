@@ -5,7 +5,7 @@
 # ==========================================================
 
 # الاتصال بقاعدة البيانات + التأكد من تسجيل الدخول
-include 'connect.php';
+require __DIR__ . '/_includes/connect.php';
 require_login();
 
 # قراءة رقم الهوية من الرابط (نستخدم GET حتى يبقى البحث ظاهراً في الرابط)
@@ -26,7 +26,7 @@ if ($search !== '') {
 # إعدادات الصفحة
 $pageTitle  = 'Update Block Info';
 $activePage = 'Update.php';
-include 'header.php';
+include __DIR__ . '/_includes/header.php';
 ?>
 
 <!-- ===== نموذج البحث ===== -->
@@ -49,7 +49,7 @@ include 'header.php';
                 <span class="muted"><?php echo count($rows); ?> block(s) found</span>
             </div>
             <!-- الجدول المشترك مع زر التعديل فقط -->
-            <?php $showEdit = true; include 'table.php'; ?>
+            <?php $showEdit = true; include __DIR__ . '/_includes/table.php'; ?>
         <?php else: ?>
             <!-- رسالة عدم وجود نتائج -->
             <div class="empty"><i class="bx bx-search-alt"></i><p>No blocks found for this ID number.</p></div>
@@ -57,4 +57,4 @@ include 'header.php';
     </section>
 <?php endif; ?>
 
-<?php include 'footer.php'; ?>
+<?php include __DIR__ . '/_includes/footer.php'; ?>

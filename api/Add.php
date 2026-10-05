@@ -4,7 +4,7 @@
 # ==========================================================
 
 # الاتصال بقاعدة البيانات + التأكد من تسجيل الدخول
-include 'connect.php';
+require __DIR__ . '/_includes/connect.php';
 require_login();
 
 # قيم مبدئية فارغة للنموذج، وقائمة فارغة للأخطاء
@@ -67,6 +67,6 @@ $submitName  = 'Send';
 $submitLabel = 'Add Block';
 
 # عرض الصفحة: الجزء العلوي + النموذج + الجزء السفلي
-include 'header.php';
-include 'block_form.php';
-include 'footer.php';
+include __DIR__ . '/_includes/header.php';
+include __DIR__ . '/_includes/block_form.php';
+include __DIR__ . '/_includes/footer.php';

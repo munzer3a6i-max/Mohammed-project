@@ -5,7 +5,7 @@
 # ==========================================================
 
 # الاتصال بقاعدة البيانات + التأكد من تسجيل الدخول
-include 'connect.php';
+require __DIR__ . '/_includes/connect.php';
 require_login();
 
 # جلب كل السجلات من الأحدث للأقدم
@@ -19,7 +19,7 @@ $sumRemaining = array_sum(array_column($rows, 'RemainingAmount'));
 # إعدادات الصفحة
 $pageTitle  = 'Block List';
 $activePage = 'Show.php';
-include 'header.php';
+include __DIR__ . '/_includes/header.php';
 ?>
 
 <!-- ===== ملخص المجاميع ===== -->
@@ -50,11 +50,11 @@ include 'header.php';
         $showEdit   = true;
         $showDelete = true;
         $backTo     = 'Show.php';
-        include 'table.php';
+        include __DIR__ . '/_includes/table.php';
         ?>
     <?php else: ?>
         <div class="empty"><i class="bx bx-folder-open"></i><p>No blocks yet.</p></div>
     <?php endif; ?>
 </section>
 
-<?php include 'footer.php'; ?>
+<?php include __DIR__ . '/_includes/footer.php'; ?>
